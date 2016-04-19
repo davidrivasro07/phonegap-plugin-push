@@ -332,6 +332,11 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
     private void createActions(Bundle extras, NotificationCompat.Builder mBuilder, Resources resources, String packageName, int notId) {
         Log.d(LOG_TAG, "create actions");
         String actions = extras.getString(ACTIONS);
+
+        Intent myIntent = new Intent(getApplicationContext(), PushHandlerActivity.class);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(myIntent);
+
         if (actions != null) {
             try {
                 JSONArray actionsArray = new JSONArray(actions);
