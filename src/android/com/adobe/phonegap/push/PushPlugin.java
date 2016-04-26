@@ -313,6 +313,10 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                 else if (key.equals(FOREGROUND)) {
                     additionalData.put(key, extras.getBoolean(FOREGROUND));
                 }
+
+                else if (key.equals(CLICKED)) {
+                    additionalData.put(key, extras.getBoolean(CLICKED));
+                }
                 else if ( value instanceof String ) {
                     String strValue = (String)value;
                     try {

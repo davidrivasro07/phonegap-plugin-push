@@ -36,16 +36,22 @@ var PushNotification = function(options) {
             that.emit('registration', result);
         } else if (result && result.additionalData && typeof result.additionalData.callback !== 'undefined') {
             var executeFunctionByName = function(functionName, context /*, args */) {
+              console.log('result', result);
                 var args = Array.prototype.slice.call(arguments, 2);
                 var namespaces = functionName.split('.');
                 var func = namespaces.pop();
-                for (var i = 0; i < namespaces.length; i++) {
+                /*for (var i = 0; i < namespaces.length; i++) {
                     context = context[namespaces[i]];
-                }
-                return context[func].apply(context, args);
-            };
+                }*/
+                console.log('func', func);
+                console.log('context', context['Location']);
+                console.log('args', args);
+                //return context[func].apply(context, args);
 
-            executeFunctionByName(result.additionalData.callback, window, result);
+                //window.location.href = '/app/contacts';
+            };
+            //executeFunctionByName(result.additionalData.callback, window, result);
+            that.emit('notification', result);
         } else if (result) {
             that.emit('notification', result);
         }

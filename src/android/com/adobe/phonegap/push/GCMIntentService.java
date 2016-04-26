@@ -62,6 +62,13 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
 
         if (extras != null) {
 
+          /*int notId = parseInt(NOT_ID, extras);
+          Intent cpIntent = new Intent(getApplicationContext(), PushHandlerActivity.class);
+          cpIntent.addFlags(Intent.FLAG_FROM_BACKGROUND);
+          cpIntent.putExtra(PUSH_BUNDLE, extras);
+          cpIntent.putExtra(NOT_ID, notId);
+          getApplicationContext().startActivity(cpIntent);*/
+
             SharedPreferences prefs = getApplicationContext().getSharedPreferences(PushPlugin.COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
             boolean forceShow = prefs.getBoolean(FORCE_SHOW, false);
 
@@ -332,11 +339,6 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
     private void createActions(Bundle extras, NotificationCompat.Builder mBuilder, Resources resources, String packageName, int notId) {
         Log.d(LOG_TAG, "create actions");
         String actions = extras.getString(ACTIONS);
-
-        Intent myIntent = new Intent(getApplicationContext(), PushHandlerActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplicationContext().startActivity(myIntent);
-
         if (actions != null) {
             try {
                 JSONArray actionsArray = new JSONArray(actions);
@@ -346,11 +348,14 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
                     JSONObject action = actionsArray.getJSONObject(i);
                     Log.d(LOG_TAG, "adding callback = " + action.getString(CALLBACK));
                     boolean foreground = action.optBoolean(FOREGROUND, true);
+                    boolean clicked = false;
                     Intent intent = null;
                     PendingIntent pIntent = null;
                     if (foreground) {
+                        clicked = true;
                         intent = new Intent(this, PushHandlerActivity.class);
                         intent.putExtra(CALLBACK, action.getString(CALLBACK));
+                        intent.putExtra(CLICKED, clicked);
                         intent.putExtra(PUSH_BUNDLE, extras);
                         intent.putExtra(FOREGROUND, foreground);
                         intent.putExtra(NOT_ID, notId);
@@ -358,6 +363,7 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
                     } else {
                         intent = new Intent(this, BackgroundActionButtonHandler.class);
                         intent.putExtra(CALLBACK, action.getString(CALLBACK));
+                        intent.putExtra(CLICKED, clicked);
                         intent.putExtra(PUSH_BUNDLE, extras);
                         intent.putExtra(FOREGROUND, foreground);
                         intent.putExtra(NOT_ID, notId);
