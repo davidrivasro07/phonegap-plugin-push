@@ -36,24 +36,48 @@ var PushNotification = function(options) {
             that.emit('registration', result);
         } else if (result && result.additionalData && typeof result.additionalData.callback !== 'undefined') {
             var executeFunctionByName = function(functionName, context /*, args */) {
-              console.log('result', result);
                 var args = Array.prototype.slice.call(arguments, 2);
                 var namespaces = functionName.split('.');
                 var func = namespaces.pop();
-                /*for (var i = 0; i < namespaces.length; i++) {
+                for (var i = 0; i < namespaces.length; i++) {
                     context = context[namespaces[i]];
-                }*/
-                console.log('func', func);
-                console.log('context', context['Location']);
-                console.log('args', args);
-                //return context[func].apply(context, args);
-
-                //window.location.href = '/app/contacts';
+                }
+                return context[func].apply(context, args);
             };
-            //executeFunctionByName(result.additionalData.callback, window, result);
-            that.emit('notification', result);
+
+            executeFunctionByName(result.additionalData.callback, window, result);
         } else if (result) {
+          console.log('result.additionalData', result);
+            var type = null
+            if (result.additionalData && result.additionalData.payload && result.additionalData.payload.type) {
+               type = result.additionalData.payload.type
+            }else{
+               type = result.additionalData['gcm.notification.type']
+            }
+
+            if(type == 'incoming_call' && !result.additionalData.foreground){
+
+            result.additionalData["from_push"] = true;
+
+            /*console.log('result.additionalData.callback', result);
+
+            var executeFunctionByNameTwo = function(functionName, context) {
+              var args = Array.prototype.slice.call(arguments, 2);
+              var namespaces = functionName.split('.');
+              var func = namespaces.pop();
+              for (var i = 0; i < namespaces.length; i++) {
+                context = context[namespaces[i]];
+              }
+              return context[func].apply(context, args);
+            };
+
+            executeFunctionByNameTwo('window.acceptVerification', window, result);*/
+
             that.emit('notification', result);
+
+          }else{
+            that.emit('notification', result);
+          }
         }
     };
 

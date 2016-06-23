@@ -22,9 +22,9 @@ public class BackgroundActionButtonHandler extends BroadcastReceiver implements 
 
         if (extras != null)	{
             Bundle originalExtras = extras.getBundle(PUSH_BUNDLE);
+
             originalExtras.putBoolean(FOREGROUND, false);
             originalExtras.putBoolean(COLDSTART, false);
-            originalExtras.putBoolean(CLICKED, false);
             originalExtras.putString(CALLBACK, extras.getString("callback"));
             PushPlugin.sendExtras(originalExtras);
         }

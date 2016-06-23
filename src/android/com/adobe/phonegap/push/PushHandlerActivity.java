@@ -29,15 +29,12 @@ public class PushHandlerActivity extends Activity implements PushConstants {
         Log.v(LOG_TAG, "onCreate");
         String callback = getIntent().getExtras().getString("callback");
         Log.d(LOG_TAG, "callback = " + callback);
-
         boolean foreground = getIntent().getExtras().getBoolean("foreground", true);
+
         Log.d(LOG_TAG, "bringToForeground = " + foreground);
 
-        boolean clicked = getIntent().getExtras().getBoolean("clicked", true);
-        Log.d(LOG_TAG, "Clicked = " + clicked);
-
         boolean isPushPluginActive = PushPlugin.isActive();
-        processPushBundle(isPushPluginActive, clicked);
+        processPushBundle(isPushPluginActive);
 
         finish();
 
@@ -55,7 +52,7 @@ public class PushHandlerActivity extends Activity implements PushConstants {
      * Takes the pushBundle extras from the intent,
      * and sends it through to the PushPlugin for processing.
      */
-    private void processPushBundle(boolean isPushPluginActive, boolean clicked) {
+    private void processPushBundle(boolean isPushPluginActive) {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null)	{
@@ -63,7 +60,6 @@ public class PushHandlerActivity extends Activity implements PushConstants {
 
             originalExtras.putBoolean(FOREGROUND, false);
             originalExtras.putBoolean(COLDSTART, !isPushPluginActive);
-            originalExtras.putBoolean(CLICKED, clicked);
             originalExtras.putString(CALLBACK, extras.getString("callback"));
 
             PushPlugin.sendExtras(originalExtras);

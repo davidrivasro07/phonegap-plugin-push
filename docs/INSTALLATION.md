@@ -12,7 +12,7 @@
   - [Bitcode](#bitcode)
 - [Additional Resources](#additional-resources)
 
-This requires phonegap/cordova CLI 5.0+ ( current stable v1.6.2 )
+This requires phonegap/cordova CLI 5.0+ ( current stable v1.6.4 )
 
 ```
 phonegap plugin add phonegap-plugin-push --variable SENDER_ID="XXXXXXX"
@@ -48,6 +48,14 @@ Where the `XXXXXXX` in `SENDER_ID="XXXXXXX"` maps to the project number in the G
       "locator": "phonegap-plugin-push"
     }
   ]
+```
+
+> Note: You need to specify the SENDER_ID variable in your config.xml if you plan on installing/restoring plugins using the prepare method.  The prepare method will skip installing the plugin otherwise.
+
+```
+<plugin name="phonegap-plugin-push" spec="1.6.0">
+    <variable name="SENDER_ID" value="XXXXXXX" />
+</plugin>
 ```
 
 ## Android details

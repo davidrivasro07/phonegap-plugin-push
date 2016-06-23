@@ -578,13 +578,13 @@
 
         UIApplication *app = [UIApplication sharedApplication];
 
-        dispatch_async(dispatch_get_main_queue(), ^{
+        /*dispatch_async(dispatch_get_main_queue(), ^{
             [NSTimer scheduledTimerWithTimeInterval:0.1
                                              target:self
                                            selector:@selector(stopBackgroundTask:)
                                            userInfo:notId
                                             repeats:NO];
-        });
+        });*/
 
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

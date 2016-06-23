@@ -1,5 +1,45 @@
 # Change Log
 
+## [1.6.3](https://github.com/phonegap/phonegap-plugin-push/tree/1.6.3) (2016-04-27)
+[Full Changelog](https://github.com/phonegap/phonegap-plugin-push/compare/1.6.2...1.6.3)
+
+**Fixed bugs:**
+
+- \[Android\] Can't install multiple apps using this plugin \(v1.6.x\) [\#768](https://github.com/phonegap/phonegap-plugin-push/issues/768)
+- JS error in "Success callbackId: PushNotifiation\#\#\#.." whenever a notification is sent to the device [\#824](https://github.com/phonegap/phonegap-plugin-push/issues/824)
+
+**Closed issues:**
+
+- Move example directory to a phonegap template [\#832](https://github.com/phonegap/phonegap-plugin-push/issues/832)
+- va [\#830](https://github.com/phonegap/phonegap-plugin-push/issues/830)
+- does not create the notification bar [\#821](https://github.com/phonegap/phonegap-plugin-push/issues/821)
+- Did not show notification in status bar for Xiomi Redmi Note 3 [\#790](https://github.com/phonegap/phonegap-plugin-push/issues/790)
+- PushNotification.hasPermission not working as expected [\#789](https://github.com/phonegap/phonegap-plugin-push/issues/789)
+
+
+## [1.6.2](https://github.com/phonegap/phonegap-plugin-push/tree/1.6.2) (2016-04-06)
+[Full Changelog](https://github.com/phonegap/phonegap-plugin-push/compare/1.6.1...1.6.2)
+
+**Fixed bugs:**
+
+- Unexpected / Broken Android Behavior [\#767](https://github.com/phonegap/phonegap-plugin-push/issues/767)
+
+**Closed issues:**
+
+- Android: JSON Exception No Value Found for Sender [\#781](https://github.com/phonegap/phonegap-plugin-push/issues/781)
+- Should I call init\(\) every time the app is launched?? [\#777](https://github.com/phonegap/phonegap-plugin-push/issues/777)
+- Request: extend action buttons to wearables [\#776](https://github.com/phonegap/phonegap-plugin-push/issues/776)
+- After upgrade: 601 duplicate symbols for architecture i386 [\#769](https://github.com/phonegap/phonegap-plugin-push/issues/769)
+- push plugin [\#766](https://github.com/phonegap/phonegap-plugin-push/issues/766)
+- Documentation mentions old name for dependency [\#763](https://github.com/phonegap/phonegap-plugin-push/issues/763)
+- push.on\('notification'\) callback is not called on coldstart on iOS [\#758](https://github.com/phonegap/phonegap-plugin-push/issues/758)
+- plugin doesn't work in background or when app not running on kitkat 4.4.2 [\#754](https://github.com/phonegap/phonegap-plugin-push/issues/754)
+- App Icon not displayed in tray using build.phonegap and cli-6.0.0 \[ios\] [\#753](https://github.com/phonegap/phonegap-plugin-push/issues/753)
+- push.on\('registration'\) event not called on IOS. [\#752](https://github.com/phonegap/phonegap-plugin-push/issues/752)
+- catch 22 when trying to use this plug [\#741](https://github.com/phonegap/phonegap-plugin-push/issues/741)
+- push.setApplicationIconBadgeNumber not working in background [\#736](https://github.com/phonegap/phonegap-plugin-push/issues/736)
+- Strange issue while debugging in Safari Inspector [\#733](https://github.com/phonegap/phonegap-plugin-push/issues/733)
+
 ## [1.6.1](https://github.com/phonegap/phonegap-plugin-push/tree/1.6.1) (2016-03-23)
 [Full Changelog](https://github.com/phonegap/phonegap-plugin-push/compare/1.6.0...1.6.1)
 

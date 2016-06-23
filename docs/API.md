@@ -7,10 +7,10 @@
   - [push.on('notification')](#pushonnotification-callback)
   - [push.on('error')](#pushonerror-callback)
 - [push.off()](#pushoffevent-callback)
-- [push.unregister()](#pushunregistersuccesshandler-errorhandler)
+- [push.unregister()](#pushunregistersuccesshandler-errorhandler-topics)
 - [push.setApplicationIconBadgeNumber()](#pushsetapplicationiconbadgenumbersuccesshandler-errorhandler-count---ios-only)
 - [push.getApplicationIconBadgeNumber()](#pushgetapplicationiconbadgenumbersuccesshandler-errorhandler---ios-only)
-- [push.finish()](#pushfinishsuccesshandler-errorhandler---ios-only)
+- [push.finish()](#pushfinishsuccesshandler-errorhandler-id---ios-only)
 
 ## PushNotification.init(options)
 
@@ -55,11 +55,14 @@ Attribute | Type | Default | Description
 `ios.badge` | `boolean` | `false` | Optional. If `true` the device sets the badge number on receipt of notification. **Note:** the value you set this option to the first time you call the init method will be how the application always acts. Once this is set programmatically in the init method it can only be changed manually by the user in Settings>Notifications>`App Name`. This is normal iOS behaviour.
 `ios.sound` | `boolean` | `false` | Optional. If `true` the device plays a sound on receipt of notification. **Note:** the value you set this option to the first time you call the init method will be how the application always acts. Once this is set programmatically in the init method it can only be changed manually by the user in Settings>Notifications>`App Name`. This is normal iOS behaviour.
 `ios.clearBadge` | `boolean` | `false` | Optional. If `true` the badge will be cleared on app startup.
+`ios.categories` | `array` | `[]` | Optional. The data required in order to enabled Action Buttons for iOS. See [Action Buttons on iOS](https://github.com/phonegap/phonegap-plugin-push/blob/master/docs/PAYLOAD.md#action-buttons-1) for more details.
 
 #### iOS GCM support
 
 The following properties are used if you want use GCM on iOS.
 
+Attribute | Type | Default | Description
+--------- | ---- | ------- | -----------
 `ios.senderID` | `string` | `undefined` (Native) | Maps to the project number in the Google Developer Console.  Setting this uses GCM for notifications instead of native
 `ios.gcmSandbox` | `boolean` | `false` | Whether to use prod or sandbox GCM setting.  Defaults to false.
 `ios.topics` | `array` | `[]` | Optional. If the array contains one or more strings each string will be used to subscribe to a GcmPubSub topic. Note: only usable in conjunction with `senderID`.
@@ -97,7 +100,9 @@ var push = PushNotification.init({
 });
 ```
 
-## PushNotification.hasPermission(successHandler)
+## PushNotification.hasPermission(successHandler) - Android & iOS only
+
+> Deprecated this method will be remove in release 2.0.0
 
 Checks whether the push notification permission has been granted.
 
@@ -152,6 +157,18 @@ push.on('registration', function(data) {
 });
 ```
 
+### Common Problems
+
+#### Got JSON Exception TIMEOUT
+
+If you run this plugin on older versions of Android and you get an error:
+
+```
+E/PushPlugin(20077): execute: Got JSON Exception TIMEOUT
+```
+
+It means you are running an older version of Google Play Services. You will need to open the Google Play Store app and update your version of Google Play Services.
+
 ## push.on('notification', callback)
 
 The event `notification` will be triggered each time a push notification is received by a 3rd party push service on the device.
@@ -165,9 +182,10 @@ Parameter | Type | Description
 `data.count` | `string` | The number of messages to be displayed in the badge iOS or message count in the notification shade in Android. For windows, it represents the value in the badge notification which could be a number or a status glyph.
 `data.sound` | `string` | The name of the sound file to be played upon receipt of the notification.
 `data.image` | `string` | The path of the image file to be displayed in the notification.
+`data.launchArgs` | `string` | The args to be passed to the application on launch from push notification. This works when notification is received in background. (Windows Only)
 `data.additionalData` | `Object` | An optional collection of data sent by the 3rd party push service that does not fit in the above properties.
 `data.additionalData.foreground` | `boolean` | Whether the notification was received while the app was in the foreground
-`data.additionalData.coldstart` | `boolean` | Will be `true` if the application is started by clicking on the push notification, `false` if the app is already started. (Android/iOS only)
+`data.additionalData.coldstart` | `boolean` | Will be `true` if the application is started by clicking on the push notification, `false` if the app is already started.
 
 ### Example
 

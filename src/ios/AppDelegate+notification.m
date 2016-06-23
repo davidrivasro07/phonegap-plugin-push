@@ -202,11 +202,6 @@ forRemoteNotification: (NSDictionary *) notification completionHandler: (void (^
     NSLog(@"Push Plugin handleActionWithIdentifier %@", identifier);
     NSMutableDictionary *userInfo = [notification mutableCopy];
     [userInfo setObject:identifier forKey:@"callback"];
-    NSString *accept = @"accept";
-    NSLog(@"Comparision %d", [identifier isEqualToString:accept]);
-    if([identifier isEqualToString:accept]){
-      [userInfo setValue:@"clicked" forKey:@"clicked"];
-    }
     NSLog(@"Push Plugin userInfo %@", userInfo);
 
     if (application.applicationState == UIApplicationStateActive) {
@@ -238,8 +233,6 @@ forRemoteNotification: (NSDictionary *) notification completionHandler: (void (^
 
         pushHandler.notificationMessage = userInfo;
         pushHandler.isInline = NO;
-
-        NSLog(@"Push Plugin pushHandler32323 %@", pushHandler.notificationMessage);
 
         [pushHandler performSelectorOnMainThread:@selector(notificationReceived) withObject:pushHandler waitUntilDone:NO];
     }

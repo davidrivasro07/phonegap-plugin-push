@@ -9,14 +9,18 @@
   - [Priority in Notifications](#priority-in-notifications)
   - [Picture Messages](#picture-messages)
   - [Background Notifications](#background-notifications)
+    - [Use of content-available: true](#use-of-content-available-true)
 - [iOS Behaviour](#ios-behaviour)
   - [Sound](#sound-1)
   - [Background Notifications](#background-notifications-1)
   - [Action Buttons](#action-buttons-1)
+    - [Action Buttons using GCM on iOS](#action-buttons-using-gcm-on-ios)
+    - [Huawei and Xiaomi Phones](#huawei-and-xiaomi-phones)
 - [Windows Behaviour](#windows-behaviour)
   - [Notifications](#notifications)
   - [Setting Toast Capable Option for Windows](#setting-toast-capable-option-for-windows)
   - [Disabling the default processing of notifications by Windows](#disabling-the-default-processing-of-notifications-by-windows)
+  - [Background Notifications](#background-notifications-2)
 
 
 # Android Behaviour
@@ -684,6 +688,46 @@ service.send(message, { registrationTokens: [ deviceID ] }, function (err, respo
 
 If do not want this type of behaviour just omit `"content-available": 1` from your push data and your `on('notification')` event handler will not be called.
 
+### Use of content-available: true
+
+The GCM docs will tell you to send a data payload of:
+
+```javascript
+{
+    "registration_ids": ["my device id"],
+    "content_available": true,
+    "data": {
+        "title": "Test Push",
+        "message": "Push number 1",
+        "info": "super secret info",
+    }
+}
+```
+
+Where the `content-available` property is part of the main payload object. Setting the property in this part of the payload will result in the PushPlugin not getting the data correctly. Setting `content-available: true` will cause the Android OS to handle the push payload for you and not pass the data to the PushPlugin.
+
+Instead move `content-available: true` into the `data` object of the payload and set it to `1` as per the example below:
+
+```javascript
+{
+    "registration_ids": ["my device id"],
+    "data": {
+        "title": "Test Push",
+        "message": "Push number 1",
+        "info": "super secret info",
+        "content-available": "1"
+    }
+}
+```
+
+### Huawei and Xiaomi Phones
+
+These phones have a particular quirk that when the app is force closed that you will no longer be able to receive notifications until the app is restarted. In order for you to receive background notifications:
+
+- On your Huawei device go to Settings > Protected apps > check "My App" where.
+- On your Xiaomi makes sure your phone has the "Auto-start" property enabled for your app.
+
+
 # iOS Behaviour
 
 ## Sound
@@ -845,7 +889,20 @@ This will produce the following notification in your tray:
 
 If your users clicks on the main body of the notification your app will be opened. However if they click on either of the action buttons the app will open (or start) and the specified JavaScript callback will be executed.
 
-> Note: Action buttons are only supported on iOS when you send directly to APNS. If you are using GCM to send to iOS devices you will lose this functionality.
+### Action Buttons using GCM on iOS
+
+If you are using GCM to send push messages on iOS you will need to send a different payload in order for the action buttons to be present in the notification shade. You'll need to use the `click-action` property in order to specify the category.
+
+```javascript
+{
+    "registration_ids": ["my device id"],
+    "notification": {
+    	"title": "AUX Scrum",
+    	"body": "Scrum: Daily touchbase @ 10am Please be on time so we can cover everything on the agenda.",
+        "click-action": "invite"
+    }
+}
+```
 
 # Windows Behaviour
 
@@ -868,3 +925,25 @@ The default handling can be disabled by setting the 'cancel' property in the not
 ```javascript
 data.additionalData.pushNotificationReceivedEventArgs.cancel = true
 ```
+
+## Background Notifications
+
+On Windows, to trigger the on('notification') event handler when your app is in the background and it is launched through the push notification, you will have to include `activation` data in the payload of the notification. This is done by using the `launch` attribute, which can be any string that can be understood by the app. However it should not cause the XML payload to become invalid.
+
+If you do not include a launch attribute string, your app will be launched normally, as though the user had launched it from the Start screen, and the notification event handler won't be called.
+
+Here is an example of a sample toast notification payload containing the launch attribute:
+
+```xml
+<toast launch="{&quot;myContext&quot;:&quot;12345&quot;}">
+    <visual>
+        <binding template="ToastImageAndText01">
+            <image id="1" src="ms-appx:///images/redWide.png" alt="red graphic"/>
+            <text id="1">Hello World!</text>
+        </binding>
+    </visual>
+</toast>
+```
+
+This launch attribute string is passed on to the app as data.launchArgs through the on('notification') handler. It's important to note that due to the Windows platform design, the other visual payload is not available to the handler on cold start. So notification attributes like message, title etc. which are available through the on('notification') handler when the app is running, won't be available for background notifications.
+
