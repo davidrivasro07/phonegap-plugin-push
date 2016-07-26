@@ -49,32 +49,31 @@ var PushNotification = function(options) {
         } else if (result) {
           console.log('result.additionalData', result);
             var type = null
+            var payload = null
             if (result.additionalData && result.additionalData.payload && result.additionalData.payload.type) {
                type = result.additionalData.payload.type
+               payload = result.additionalData.payload
             }else{
-               type = result.additionalData['gcm.notification.type']
+              payload = JSON.parse(result.additionalData['gcm.notification.payload'])
+              if(payload.type){
+                type = payload.type
+              }else{
+                type = result.additionalData['gcm.notification.type']
+              }
+
             }
 
             if(type == 'incoming_call' && !result.additionalData.foreground){
 
             result.additionalData["from_push"] = true;
 
-            /*console.log('result.additionalData.callback', result);
-
-            var executeFunctionByNameTwo = function(functionName, context) {
-              var args = Array.prototype.slice.call(arguments, 2);
-              var namespaces = functionName.split('.');
-              var func = namespaces.pop();
-              for (var i = 0; i < namespaces.length; i++) {
-                context = context[namespaces[i]];
-              }
-              return context[func].apply(context, args);
-            };
-
-            executeFunctionByNameTwo('window.acceptVerification', window, result);*/
-
             that.emit('notification', result);
 
+          }else if (type == 'groupcall_new' && !result.additionalData.foreground){
+
+            result.additionalData["group_invitation_from_push"] = true;
+
+            that.emit('notification', result);
           }else{
             that.emit('notification', result);
           }
